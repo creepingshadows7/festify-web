@@ -22,4 +22,5 @@ jobs:
         run: |
           CLEAN_URL=${GITLAB_URL#https://}
           git remote add gitlab https://oauth2:${GITLAB_TOKEN}@${CLEAN_URL}
-          git push --mirror gitlab
+          git push gitlab --all
+          git push gitlab --tags
