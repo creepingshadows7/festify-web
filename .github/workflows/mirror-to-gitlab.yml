@@ -1,0 +1,26 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_URL: ${{ secrets.GITLAB_URL }}
+        run: |
+          CLEAN_URL=${GITLAB_URL#https://}
+          git remote add gitlab https://oauth2:${GITLAB_TOKEN}@${CLEAN_URL}
+          git push gitlab --all
+          git push gitlab --tags
